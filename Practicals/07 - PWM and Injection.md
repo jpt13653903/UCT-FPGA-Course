@@ -31,13 +31,13 @@ This practical implements the PWM and data injection modules.
 
 ![Simple Audio Player (2)](PWMandInjection/AudioPlayer_Simple2.svg)
 
-- Add the provided [`VirtualJTAG_MM_Write.v`](https://github.com/jpt13653903/UCT-FPGA-Course-2024/blob/master/SDRAM%20Loader/VirtualJTAG_MM_Write.v)
+- Add the provided [`VirtualJTAG_MM_Write.v`](https://github.com/jpt13653903/UCT-FPGA-Course/blob/master/SDRAM%20Loader/VirtualJTAG_MM_Write.v)
   module to the project and create an instance in the top-level entity
 - Connect the Avalon interface of this module to the `Master` interface
   of the Qsys instance
-- Use the provided [`CreateData.m`](https://github.com/jpt13653903/UCT-FPGA-Course-2024/blob/master/SDRAM%20Loader/CreateData.m)
+- Use the provided [`CreateData.m`](https://github.com/jpt13653903/UCT-FPGA-Course/blob/master/SDRAM%20Loader/CreateData.m)
   Matlab script to create test data files
-- Use the provided [`WriteData.tcl`](https://github.com/jpt13653903/UCT-FPGA-Course-2024/blob/master/SDRAM%20Loader/WriteData.tcl)
+- Use the provided [`WriteData.tcl`](https://github.com/jpt13653903/UCT-FPGA-Course/blob/master/SDRAM%20Loader/WriteData.tcl)
   TCL script to load data into the memory (the transfer takes between 2 and 5
   minutes &ndash; it is useful to display the high bits of the SDRAM address
   on the LEDs as a progress indication)

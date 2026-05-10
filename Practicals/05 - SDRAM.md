@@ -91,7 +91,7 @@ always @(posedge Clk_100M) Reset <= ~PLL_Locked || ~ipnReset;
 
 If you feel really ambitious, you can write your own SDRAM controller.  The
 datasheet is provided in the
-[Github References](https://github.com/jpt13653903/UCT-FPGA-Course-2024/blob/master/Reference%20Material/Peripherals/IS42S16320D.pdf).
+[Github References](https://github.com/jpt13653903/UCT-FPGA-Course/blob/master/Reference%20Material/Peripherals/IS42S16320D.pdf).
 It is highly recommended, however, that you use an existing controller, such as
 [jpt13653903/IS42S16320D-SDRAM](https://github.com/jpt13653903/IS42S16320D-SDRAM) on Github.
 

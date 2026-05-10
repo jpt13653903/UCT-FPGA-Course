@@ -1,11 +1,11 @@
-# FPGA Master Course &ndash; 2024
+# FPGA Master Course &ndash; 2026
 
-This repo contains the course material for the 2024 FPGA course,
+This repo contains the course material for the 2026 FPGA course,
 presented at UCT.
 
-- EEE5132Z: 9 to 13 September 2024
+- EEE5132Z: 3 to 7 August 2026
 - UCT campus, Room 6.08, 6th Floor, Menzies Building
-- Presented by John-Philip Taylor
+- Presented by Dr John-Philip Taylor
 - 5 CPD points, ECSA course code: UCTREDFBS22
 
 Refer to [the course handout](Reference%20Material/Course%20Handout.pdf) for more information.
