@@ -1,8 +1,10 @@
 db
 incremental_db
 output_files
+greybox_tmp
 [sS]imulation
 
 *.qws
 *.sopcinfo
+*.stp
 
