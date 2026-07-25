@@ -469,5 +469,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ipADXL345_*
 #-------------------------------------------------------------------------------
 ```
 
+If the accelerometer is not responding, use the `nReset` button.
+
 ![Sources and Probes](Questa/SourcesAndProbes.png)
 

@@ -22,7 +22,7 @@ After starting Quartus, you should see a screen similar to the following:
 
 ## Open the new project wizard
 
-![New Project Menu](Quartus/NewProjectMenu.png)
+![New Project Menu](Quartus/NewProjectWizard.png)
 
 ### Choose "Empty Project"
 
@@ -121,7 +121,13 @@ endmodule
 
 ## Save the top-level module
 
+It is customary to make the file name the same as the module name.
+
 ![Save Module](Quartus/SaveModule.png)
+
+## Add the file to project
+
+![Add File to Project](Quartus/AddFileToProject.png)
 
 --------------------------------------------------------------------------------
 
@@ -191,15 +197,13 @@ Note the red "Timing Analyser" report... We'll worry about that later...
 - Make sure the "Hardware Setup" says "USB-Blaster"
 - If you cannot select the USB-Blaster from the list of hardware devices,
   you'll need to update the driver &ndash; point your Device-Manager's
-  "Update Driver" wizard to `C:/intelFPGA_lite/23.1std/quartus/drivers`
+  "Update Driver" wizard to `C:\altera_lite\25.1std\quartus\drivers`
 - Click on "Add File..." and choose `output_files/MyFirstProject.sof`
 - Click on "Start" to program the FPGA
 - Play with the switches to make sure your design is working
 - The SOF is volatile.  If you're happy with the design and want to make it
   non-volatile, choose `output_files/MyFirstProject.pof` instead.
 
-### Save the configuration
-
-![Save Configuration](Quartus/SaveConfiguration.png)
+![Program FPGA](Quartus/ProgramFPGA.png)
 
 --------------------------------------------------------------------------------

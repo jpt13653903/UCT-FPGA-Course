@@ -19,6 +19,9 @@ by 90&deg; in order to compensate for the FPGA pin and PCB delays.
 ![Create PLL](SDRAM/CreatePLL.png)
 
 Call it `SDRAM_PLL` and set the source to 50 MHz on a speed-grade 7 device.
+You might need to install the
+[Quartus Patch](https://community.altera.com/kb/knowledge-base/why-does-the-text-overlap-in-the-altpll-ip-parameter-editor/349903)
+to get the wizard to render properly.
 
 ![PLL Parameters](SDRAM/PLL_Parameters_01.png)
 
@@ -46,11 +49,9 @@ Set the second output to 100 MHz, -90&deg; phase
 
 ![PLL Parameters](SDRAM/PLL_Parameters_07.png)
 
-We'll need a 780 kHz clock later, so you might as well add it now.
+No more outputs are required.
 
 ![PLL Parameters](SDRAM/PLL_Parameters_08.png)
-
-No more outputs are required.
 
 ![PLL Parameters](SDRAM/PLL_Parameters_09.png)
 
@@ -251,6 +252,8 @@ set_multicycle_path -from [get_clocks opClk_SDRAM] \
 
 set_output_delay -max -clock opClk_SDRAM  1.6 [get_ports { bpSDRAM* opSDRAM* }]
 set_output_delay -min -clock opClk_SDRAM -0.9 [get_ports { bpSDRAM* opSDRAM* }]
+
+set_false_path -from * -to [get_ports opReadData*]
 #-------------------------------------------------------------------------------
 ```
 
