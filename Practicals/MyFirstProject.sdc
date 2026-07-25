@@ -16,6 +16,38 @@ set_false_path -to * -from [get_ports ipSwitch*]
 set_false_path -to * -from [get_ports ipnReset*]
 #-------------------------------------------------------------------------------
 
+create_clock -name opADXL345_SClk -period 200 [get_ports opADXL345_SClk]
+
+set_output_delay -min -clock opADXL345_SClk             -6 [get_ports opADXL345_nCS]
+set_output_delay -max -clock opADXL345_SClk              6 [get_ports opADXL345_nCS]
+set_output_delay -min -clock opADXL345_SClk -clock_fall -6 [get_ports opADXL345_nCS] -add_delay
+set_output_delay -max -clock opADXL345_SClk -clock_fall  6 [get_ports opADXL345_nCS] -add_delay
+
+set_output_delay -min -clock opADXL345_SClk             -6 [get_ports opADXL345_SDI]
+set_output_delay -max -clock opADXL345_SClk              6 [get_ports opADXL345_SDI]
+set_output_delay -min -clock opADXL345_SClk -clock_fall -6 [get_ports opADXL345_SDI] -add_delay
+set_output_delay -max -clock opADXL345_SClk -clock_fall  6 [get_ports opADXL345_SDI] -add_delay
+
+set_input_delay  -min -clock opADXL345_SClk -clock_fall  0 [get_ports ipADXL345_SDO]
+set_input_delay  -max -clock opADXL345_SClk -clock_fall 41 [get_ports ipADXL345_SDO]
+
+set_multicycle_path -from [get_clocks opADXL345_SClk] \
+                    -to   [get_clocks ipClk_50M] \
+                    -setup 10 \
+
+set_multicycle_path -from [get_clocks opADXL345_SClk] \
+                    -to   [get_clocks ipClk_50M] \
+                    -hold 9
+
+set_multicycle_path -from [get_clocks ipClk_50M] \
+                    -to   [get_clocks opADXL345_SClk] \
+                    -start -setup 5
+
+set_multicycle_path -from [get_clocks ipClk_50M] \
+                    -to   [get_clocks opADXL345_SClk] \
+                    -start -hold 4
+#-------------------------------------------------------------------------------
+
 create_generated_clock -source [get_pins { SDRAM_PLL_Inst|altpll_component|auto_generated|pll1|clk[1] } ] \
                        -name opClk_SDRAM [get_ports opClk_SDRAM]
 
@@ -44,7 +76,5 @@ set_multicycle_path -from [get_clocks opClk_SDRAM] \
 
 set_output_delay -max -clock opClk_SDRAM  1.6 [get_ports { bpSDRAM* opSDRAM* }]
 set_output_delay -min -clock opClk_SDRAM -0.9 [get_ports { bpSDRAM* opSDRAM* }]
-
-set_false_path -from * -to [get_ports opReadData*]
 #-------------------------------------------------------------------------------
 
