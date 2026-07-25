@@ -2,8 +2,8 @@ module MyFirstProject(
   input  ipClk_50M,
   input  ipnReset,
 
-  input  [9:0]Switch,
-  output [9:0]LED,
+  input  [9:0]ipSwitch,
+  output [9:0]opLED,
 
   output opADXL345_nCS,
   output opADXL345_SClk,
@@ -15,9 +15,9 @@ module MyFirstProject(
 wire [9:0]Source;
 SourcesAndProbes SourcesAndProbes_inst(
   .source(Source),
-  .probe (Switch)
+  .probe (ipSwitch)
 );
-assign LED = Switch ^ Source;
+assign opLED = ipSwitch ^ Source;
 //------------------------------------------------------------------------------
 
 wire [15:0]G_Sensor_X;
