@@ -4,23 +4,23 @@ Prerequisite: Day 5 lectures
 
 This practical implements the finite impulse response filter.
 
-![Full Block Diagram](FIR_Filter/SpectrumAnalyser.svg)
+![Full Block Diagram](FIR_Filter/SonarFirmware.svg)
 
-At the end, you'll be able to plot the spectrum
-of various waveforms on an oscilloscope.
-
-![60 kHz Square Spectrum](FIR_Filter/Spectrum_60_kHz_Square.png)
+This removes the high frequency component from the mixing process.
 
 --------------------------------------------------------------------------------
 
 ## Filter Parameters
 
-- 1024-point FIR filter that decimates by 128 (i.e. one sample output for every 128&nbsp;samples input)
-- Use a cut-off frequency of 390&nbsp;kHz and a [Hann window](https://en.wikipedia.org/wiki/Window\_function\#Hann\_window)<br/>$w(n) = \sin^2\left(\frac{\pi n}{N-1}\right)$
+- 2048-point FIR filter that decimates by 256
+  (i.e. one sample output for every 256&nbsp;samples input)
+- Use a cut-off frequency of 300&nbsp;Hz and a
+  [Hann window](https://en.wikipedia.org/wiki/Window\_function\#Hann\_window)<br/>
+  $w(n) = \sin^2\left(\frac{\pi n}{N-1}\right)$
 
 --------------------------------------------------------------------------------
 
-## Task List
+## Design Workflow
 
 - Design the FIR filter in Matlab / Python / Whatever and test using integer values
 - Check for overflows, rounding problems, etc.
@@ -30,6 +30,19 @@ of various waveforms on an oscilloscope.
 - Implement and integrate the FIR filter into the design, and test the system as a whole
 
 ![Simulation](FIR_Filter/Simulation.svg)
+
+--------------------------------------------------------------------------------
+
+## Sonar
+
+Once the FIR filter is working, you should have a working sonar.
+The intended sequence of events are:
+
+1. The PC triggers a burst
+2. The FPGA performs a log of $N$ sweeps, then lets the PC know it's done
+3. The PC downloads the log
+4. The PC then performs further processing (e.g. the range-FFT) and plots the result
+5. Repeat from step 1
 
 --------------------------------------------------------------------------------
 
