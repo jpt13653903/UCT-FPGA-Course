@@ -14,6 +14,44 @@ derive_clock_uncertainty
 set_false_path -from * -to [get_ports opLED*]
 set_false_path -to * -from [get_ports ipSwitch*]
 set_false_path -to * -from [get_ports ipnReset*]
+
+set_false_path -from * -to [get_ports bpGPIO*]
+set_false_path -to * -from [get_ports bpGPIO*]
+
+set_false_path -from * -to [get_ports opDebug*]
+set_false_path -from * -to [get_ports opPA_Enable]
+set_false_path -from * -to [get_ports opPWM]
+#-------------------------------------------------------------------------------
+
+set_false_path -from * -to [get_ports bpArduino_IO*]
+set_false_path -to * -from [get_ports bpArduino_IO*]
+#-------------------------------------------------------------------------------
+
+# These are not as per the datasheet because timing is guaranteed by the state machine
+set_output_delay -min -clock [get_clocks SDRAM_PLL:*wire_pll1_clk[0]] 0 [get_ports opADC*]
+set_output_delay -max -clock [get_clocks SDRAM_PLL:*wire_pll1_clk[0]] 1 [get_ports opADC*]
+
+set_output_delay -min -clock [get_clocks SDRAM_PLL:*wire_pll1_clk[0]] 0 [get_ports bpADC*]
+set_output_delay -max -clock [get_clocks SDRAM_PLL:*wire_pll1_clk[0]] 1 [get_ports bpADC*]
+
+set_input_delay -min -clock [get_clocks SDRAM_PLL:*wire_pll1_clk[0]] 0 [get_ports ipADC*]
+set_input_delay -max -clock [get_clocks SDRAM_PLL:*wire_pll1_clk[0]] 1 [get_ports ipADC*]
+
+set_input_delay -min -clock [get_clocks SDRAM_PLL:*wire_pll1_clk[0]] 0 [get_ports bpADC*]
+set_input_delay -max -clock [get_clocks SDRAM_PLL:*wire_pll1_clk[0]] 1 [get_ports bpADC*]
+#-------------------------------------------------------------------------------
+
+set_multicycle_path -from [get_registers NoiseShaper:NoiseShaper_Inst|t2*] -to [get_registers NoiseShaper:NoiseShaper_Inst|t2*] -setup 256
+set_multicycle_path -from [get_registers NoiseShaper:NoiseShaper_Inst|t2*] -to [get_registers NoiseShaper:NoiseShaper_Inst|t2*] -hold  254
+
+set_multicycle_path -from [get_registers NoiseShaper:NoiseShaper_Inst|t3*] -to [get_registers NoiseShaper:NoiseShaper_Inst|t2*] -setup 256
+set_multicycle_path -from [get_registers NoiseShaper:NoiseShaper_Inst|t3*] -to [get_registers NoiseShaper:NoiseShaper_Inst|t2*] -hold  254
+
+set_multicycle_path -from [get_registers NoiseShaper:NoiseShaper_Inst|t2*] -to [get_registers NoiseShaper:NoiseShaper_Inst|t3*] -setup 256
+set_multicycle_path -from [get_registers NoiseShaper:NoiseShaper_Inst|t2*] -to [get_registers NoiseShaper:NoiseShaper_Inst|t3*] -hold  254
+
+set_multicycle_path -from [get_registers NoiseShaper:NoiseShaper_Inst|t3*] -to [get_registers NoiseShaper:NoiseShaper_Inst|t3*] -setup 256
+set_multicycle_path -from [get_registers NoiseShaper:NoiseShaper_Inst|t3*] -to [get_registers NoiseShaper:NoiseShaper_Inst|t3*] -hold  254
 #-------------------------------------------------------------------------------
 
 create_clock -name opADXL345_SClk -period 200 [get_ports opADXL345_SClk]
@@ -33,7 +71,7 @@ set_input_delay  -max -clock opADXL345_SClk -clock_fall 41 [get_ports ipADXL345_
 
 set_multicycle_path -from [get_clocks opADXL345_SClk] \
                     -to   [get_clocks ipClk_50M] \
-                    -setup 10 \
+                    -setup 10
 
 set_multicycle_path -from [get_clocks opADXL345_SClk] \
                     -to   [get_clocks ipClk_50M] \

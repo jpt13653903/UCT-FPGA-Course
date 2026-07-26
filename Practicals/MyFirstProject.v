@@ -19,8 +19,29 @@ module MyFirstProject(
   output [12:0]opSDRAM_A,
   output [ 1:0]opSDRAM_BA,
   output [ 1:0]opSDRAM_DQM,
-  inout  [15:0]bpSDRAM_DQ
+  inout  [15:0]bpSDRAM_DQ,
+
+  output [11:1]opDebug,
+  output       opPA_Enable,
+  output       opPWM,
+
+  output [ 2:1]opADC_nCS,
+  inout  [ 3:0]bpADC_CR_DB,
+  output       opADC_nWR,
+  output       opADC_nRD,
+  output       opADC_CONVST,
+  input  [ 2:1]ipADC_nEOC,
+  input  [13:2]ipADC_DB,
+
+  inout  [15:0]bpArduino_IO
 );
+//------------------------------------------------------------------------------
+
+assign bpArduino_IO = 'hZ;
+//------------------------------------------------------------------------------
+
+assign opDebug     = 0;
+assign opPA_Enable = ipSwitch[0];
 //------------------------------------------------------------------------------
 
 wire Clk_100M;
@@ -178,6 +199,53 @@ always @(posedge Clk_100M) begin
   endcase
   Registers_ReadDataValid <= Registers_Read;
 end
+//------------------------------------------------------------------------------
+
+wire [15:0]InjectionData;
+wire       InjectionValid;
+
+Injection Injection_Inst(
+  .ipClk  (Clk_100M),
+  .ipReset(Reset),
+
+  .opData (InjectionData),
+  .opValid(InjectionValid)
+);
+//------------------------------------------------------------------------------
+
+wire [ 3:0]opADC_CR;
+wire       enADC_CR;
+
+assign bpADC_CR_DB = enADC_CR ? opADC_CR : 4'hZ;
+//------------------------------------------------------------------------------
+
+wire [7:0]DutyCycle;
+wire      DutyCycleValid;
+
+NoiseShaper #(
+  .InputN (16),
+  .OutputN( 8),
+  .N      ( 2)  // Order of the noise shaper
+)NoiseShaper_Inst(
+  .ipClk  (Clk_100M),
+  .ipReset(Reset),
+
+  .ipData ({ ~InjectionData[15], InjectionData[14:0] }), // Signed to offset-binary
+  .ipValid(InjectionValid),
+
+  .opData (DutyCycle),
+  .opValid(DutyCycleValid)
+);
+//------------------------------------------------------------------------------
+
+PWM PWM_Inst(
+  .ipClk  (Clk_100M),
+
+  .ipData (DutyCycle),
+  .ipValid(DutyCycleValid),
+
+  .opOutput(opPWM)
+);
 //------------------------------------------------------------------------------
 
 endmodule
