@@ -21,5 +21,5 @@ as a collaborator on your repository.
 - [DE10-Lite](https://de10-lite.terasic.com)
 - [MAX-10 FPGA](https://www.altera.com/products/fpga/max/10)
 - [Quartus Prime](https://www.altera.com/products/development-tools/quartus)
-- [Sonar PCB](https://github.com/jpt13653903/Sonar)
+- [Sonar PCB](https://github.com/jpt13653903/Sonar/tree/v1.0)
 

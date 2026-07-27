@@ -16,7 +16,7 @@ This practical implements the PWM and data injection modules.
 
 ## Sonar PCB
 
-Familiarise yourself with the [Sonar PCB](https://github.com/jpt13653903/Sonar).
+Familiarise yourself with the [Sonar PCB](https://github.com/jpt13653903/Sonar/tree/v1.0).
 
 > [!CAUTION]
 > The Sonar PCB is a prototype, and therefore not foolproof.  You can break it.
@@ -26,7 +26,7 @@ Familiarise yourself with the [Sonar PCB](https://github.com/jpt13653903/Sonar).
 <img src="PWMandInjection/Front.jpg" height="400px"/><img src="PWMandInjection/Back.jpg" height="400px"/>
 
 Make sure you understand
-[the schematic](https://github.com/jpt13653903/Sonar/blob/master/KiCAD/CAM/Sonar.pdf),
+[the schematic](https://github.com/jpt13653903/Sonar/blob/v1.0/KiCAD/CAM/Sonar.pdf),
 especially the routing network.
 
 ![Routing Network](PWMandInjection/RoutingNetwork.svg)
