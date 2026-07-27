@@ -17,6 +17,8 @@ Open Platform Designer:
 
 ![Platform Designer Start](PlatformDesigner/PlatformDesignerStart.png)
 
+Change the clock frequency to 100&nbsp;MHz.
+
 ### Add a JTAG to Avalon Master Bridge
 
 Generally, the Platform Designer is used to set up an embedded microcontroller
@@ -64,7 +66,8 @@ We also want the FPGA to be able to access the SDRAM, so add a second master:
 
 ## Hook up the system
 
-Leave the second master idle for now, but hook up the rest.
+Leave the second master idle for now, but hook up the rest.  Remember to also
+hook up the `SDRAM_...` interface to the SDRAM controller.
 
 ```systemverilog
 wire [29:0]Master_Address;
@@ -200,7 +203,7 @@ import subprocess
 
 class SystemConsole:
     def __init__(self):
-        command = 'C:/intelFPGA_lite/23.1std/quartus/sopc_builder/bin/system-console.exe --cli --disable_readline'
+        command = 'C:/altera_lite/25.1std/quartus/sopc_builder/bin/system-console.exe --cli --disable_readline'
         sys.stdout.flush()
         self.console = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         sys.stdout.flush()

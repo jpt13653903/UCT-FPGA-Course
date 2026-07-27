@@ -42,7 +42,9 @@ More about that later.  For now, choose Sources and Probes:
 
 ### Open the auto-generated wrapper
 
-![Open Wrapper](SourcesAndProbes/OpenWrapper.png)
+This is in the `MegaFunctions\SourcesAndProbes\synthesis` folder.  You could
+also open the `MegaFunctions\SourcesAndProbes\SourcesAndProbes_bb.v` file
+if you're only interested in the port definitions.
 
 You should see a Verilog file that contains, among other details:
 
@@ -53,7 +55,9 @@ module SourcesAndProbes (
 );
 ```
 
-This can be copied and pasted to instantiate the module.
+This can be copied and pasted to instantiate the module.  You could also copy
+from the `MegaFunctions\SourcesAndProbes\SourcesAndProbes_inst.v` file to make
+instantiation easier.
 
 ### Instantiate the module
 
@@ -74,7 +78,7 @@ you figure out how to solve that one.
 ### Direct Option
 
 You can also instantiate the IP Block directly (i.e. without using the wizard).
-You should consult [the manual](https://www.intel.com/content/www/us/en/programmable/quartushelp/23.1/index.htm?q=/content/www/us/en/programmable/quartushelp/23.1/hdl/mega/mega_file_altsource_probe.htm)
+You should consult [the manual](https://www.intel.com/content/www/us/en/programmable/quartushelp/25.1/index.htm?q=/content/www/us/en/programmable/quartushelp/23.1/hdl/mega/mega_file_altsource_probe.htm)
 if you'd like to follow this route.  The resulting instantiation in your
 top-level module would look similar to:
 
@@ -82,7 +86,7 @@ top-level module would look similar to:
 wire [9:0]Source;
 
 altsource_probe #(
-  .instance_id             ("Prb1"),
+  .instance_id             ("PRB1"),
   .sld_auto_instance_index ("YES"),
   .probe_width             (10),
   .source_width            (10)
@@ -103,9 +107,10 @@ Compile and program the FPGA, then open the "In-System Sources and Probes Editor
 
 ![Sources and Probes Menu](SourcesAndProbes/SourcesAndProbesMenu.png)
 
-It might complain about "No instances found in the current project or on the device".  You can safely ignore this.
+It might complain about "No instances found in the current project or on the device".
+You can safely ignore this.
 
-Select the instance you want to connect to ("Prb1" in this case), then click
+Select the instance you want to connect to ("PRB1" in this case), then click
 the "Continuously Read Probe Data" toolbar icon: ![Sample Icon](SourcesAndProbes/SampleIcon.png)
 
 Change the slide-switches to see the probes update, and click on the source

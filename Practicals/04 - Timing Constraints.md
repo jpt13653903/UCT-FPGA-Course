@@ -28,7 +28,7 @@ set_output_delay -clock altera_reserved_tck -clock_fall 3 [get_ports {altera_res
 
 ### Add the clocks
 
-You've added a 50 MHz clock to drive the ADXL345.  Quartus needs to know about it:
+You've added a 50&nbsp;MHz clock to drive the ADXL345.  Quartus needs to know about it:
 
 ```tcl
 create_clock -name ipClk_50M -period 20 [get_ports ipClk_50M]
@@ -53,8 +53,9 @@ You can use the Timing Analyzer tool to list them:
 
 ![Unconstrained Paths](Timing/UnconstrainedPaths.png)
 
-**NOTE**: You do not need to recompile to update the timing analysis.  Simply
-          reset the design and then re-run the analysis you're interested in.
+>[!TIP]
+> You do not need to recompile to update the timing analysis.  Simply
+> reset the design and then re-run the analysis you're interested in.
 
 ![Reset Design](Timing/ResetDesign.png)
 
@@ -68,7 +69,7 @@ set_false_path -to * -from [get_ports ipnReset*]
 
 ### Now constrain the ADXL345 interface
 
-Consult the ADXL345 datasheet and add the constraints.  Add a 1 ns uncertainty.
+Consult the ADXL345 datasheet and add the constraints.  Add a 1&nbsp;ns uncertainty.
 
 ```tcl
 create_clock -name opADXL345_SClk -period 200 [get_ports opADXL345_SClk]
@@ -119,7 +120,7 @@ tool to draw you the timing diagrams:
 
 ![Device to FPGA setup](Timing/DevicetoFPGAsetup.png)
 
-You can now use the TCL console to quickly run through all 4 options of data
+You can now use the TCL console to quickly run through all 4&nbsp;options of data
 direction and setup vs. hold.  Press `up` in the console to get to the
 previous command, and then run each one:
 

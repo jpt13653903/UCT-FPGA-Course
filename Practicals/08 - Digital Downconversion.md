@@ -1,22 +1,64 @@
-# Practical &ndash; Digital Downconversion
+# Practical &ndash; ADC and Digital Downconversion
 
 Prerequisite: Day 4 lectures
 
-This practical increases the data rate of the injector and
-implements the digital down-conversion.
+This practical uses the two 8-channel ADC ICs to sample some analogue
+waveforms, digitally downconverts those samples and streams the result to the
+PC for further analysis.
 
-![Local Block Diagram](DigitalDownconversion/SpectrumAnalyser.svg)
+![Local Block Diagram](DigitalDownconversion/SonarFirmware.svg)
+
+You'll need to solder some links of the routing network so that some of the ADC
+inputs are driven (typically by the resistor-ladder test circuit on the side of
+the PCB).
+
+Don't link up all the channels, because you'll need to remove them afterwards.
 
 --------------------------------------------------------------------------------
 
-## Task List
+## ADC Driver
 
-- Modify the injection module to inject 8-bit data at 100&nbsp;MSps
-- Implement a complex NCO (100 MSps, 12-bit phase, 9-bit amplitude) and verify through simulation
-- Implement a complex mixer (real input; complex output) and verify through simulation
-- Ensure that the design meets timing requirements
-- Use JTAG to control the NCO frequency (Your choice of Source-and-Probes, Virtual JTAG, JTAG to Avalon Bridge, etc.)
-- Use injection data and mixer settings that result in low frequency components (<20 kHz) and display using the Oscilloscope
+You are encouraged to write your own ADC driver eventually, but in the interest
+of time use the [one provided](../Modules/ADC_Driver/MAX11059.v).
+
+Create an instance of the ADC driver and hook it up to the ICs.
+Set a sampling rate of 97.656&nbsp;250&nbsp;kSps.
+
+Use the resistor-ladder to inject signals and make sure that it's working by
+whatever method you prefer (e.g. SignalTap, playing the signal out the speaker, etc.)
+
+--------------------------------------------------------------------------------
+
+## Digital Downconversion
+
+Implement a complex NCO (97.656&nbsp;250&nbsp;kSps, 24-bit frequency,
+12-bit phase, 9-bit amplitude) and verify through simulation.
+
+![DDS](DigitalDownconversion/DDS.svg)
+
+Then mix (multiply) the real input from the ADC with the complex output of the NCO.
+Sub-sample the result by a factor of 256.
+
+--------------------------------------------------------------------------------
+
+## Output Stream
+
+The sampling rate at this point is very low, so transfer to the PC can happen
+by means of internal memory.  This said, it would be advantageous to use the
+external memory instead, so that you can sample for longer at a time.
+
+Trigger a set sample size, after which the PC can download the resulting log.
+A second or two worth of data is plenty.  Plot the result in Python.
+
+There is no filter before sub-sampling, so the result will be a bit of a mess.
+This will be fixed with a FIR filter in practical 10.
+
+--------------------------------------------------------------------------------
+
+## Control
+
+Everything can be hard-coded for now.
+Register-based control is added in the next practical.
 
 --------------------------------------------------------------------------------
 

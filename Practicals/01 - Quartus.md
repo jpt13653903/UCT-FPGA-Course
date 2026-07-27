@@ -4,7 +4,10 @@ Prerequisite: Day 1 lectures
 
 - Creating and setting up a new project (from scratch)
 - Compiling the design and programming the device
-- **Note:** The Lab is re-imaged daily, so remember to save your project somewhere else at the end of the day
+
+>[!NOTE]
+> The Lab is re-imaged daily,
+> so remember to save your project somewhere else at the end of the day
 
 --------------------------------------------------------------------------------
 
@@ -22,7 +25,7 @@ After starting Quartus, you should see a screen similar to the following:
 
 ## Open the new project wizard
 
-![New Project Menu](Quartus/NewProjectMenu.png)
+![New Project Menu](Quartus/NewProjectWizard.png)
 
 ### Choose "Empty Project"
 
@@ -36,7 +39,8 @@ After starting Quartus, you should see a screen similar to the following:
 
 ![Choose Device](Quartus/ChooseDevice.png)
 
-**NOTE**: You have to actually select the device, not only reduce the list.
+>[!NOTE]
+> You have to actually select the device, not only reduce the list.
 
 ### Or choose a board
 
@@ -121,7 +125,13 @@ endmodule
 
 ## Save the top-level module
 
+It is customary to make the file name the same as the module name.
+
 ![Save Module](Quartus/SaveModule.png)
+
+## Add the file to project
+
+![Add File to Project](Quartus/AddFileToProject.png)
 
 --------------------------------------------------------------------------------
 
@@ -137,6 +147,10 @@ Before setting the pin assignments, you have to run Analysis and Elaboration:
 
 Ensure that the pins numbers are correctly taken from the DE10-Lite manual.
 Also make sure that the I/O standard, current strength, etc. are correct.
+
+>[!CAUTION]
+> Incorrect pin assignments can damage the board,
+> so double-check before programming
 
 ### Easier Pin-assignments...
 
@@ -174,6 +188,7 @@ Other pin properties you need to be aware of include:
 - Use a high drive strength for pins that are higher speed and / or capacitively loaded
 - Use a low drive strength when saving power is required (also limits the bandwidth)
 - The MAX-10 supports Schmitt-triggered inputs
+- Some FPGA families support on-chip series-match output resistors
 
 --------------------------------------------------------------------------------
 
@@ -191,15 +206,13 @@ Note the red "Timing Analyser" report... We'll worry about that later...
 - Make sure the "Hardware Setup" says "USB-Blaster"
 - If you cannot select the USB-Blaster from the list of hardware devices,
   you'll need to update the driver &ndash; point your Device-Manager's
-  "Update Driver" wizard to `C:/intelFPGA_lite/23.1std/quartus/drivers`
+  "Update Driver" wizard to `C:\altera_lite\25.1std\quartus\drivers`
 - Click on "Add File..." and choose `output_files/MyFirstProject.sof`
 - Click on "Start" to program the FPGA
 - Play with the switches to make sure your design is working
 - The SOF is volatile.  If you're happy with the design and want to make it
   non-volatile, choose `output_files/MyFirstProject.pof` instead.
 
-### Save the configuration
-
-![Save Configuration](Quartus/SaveConfiguration.png)
+![Program FPGA](Quartus/ProgramFPGA.png)
 
 --------------------------------------------------------------------------------

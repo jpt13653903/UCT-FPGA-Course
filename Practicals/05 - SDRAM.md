@@ -10,7 +10,7 @@ and then analyses it using the Signal Tap Logic Analyser.
 ## Create the clocks
 
 The SDRAM IC has really tight timing requirements.  In order to meet these
-requirements, you must create two 100 MHz clocks: one to drive the FPGA logic,
+requirements, you must create two 100&nbsp;MHz clocks: one to drive the FPGA logic,
 and another for the SDRAM device.  The device clock must lead the FPGA clock
 by 90&deg; in order to compensate for the FPGA pin and PCB delays.
 
@@ -18,7 +18,10 @@ by 90&deg; in order to compensate for the FPGA pin and PCB delays.
 
 ![Create PLL](SDRAM/CreatePLL.png)
 
-Call it `SDRAM_PLL` and set the source to 50 MHz on a speed-grade 7 device.
+Call it `SDRAM_PLL` and set the source to 50&nbsp;MHz on a speed-grade 7&nbsp;device.
+You might need to install the
+[Quartus Patch](https://community.altera.com/kb/knowledge-base/why-does-the-text-overlap-in-the-altpll-ip-parameter-editor/349903)
+to get the wizard to render properly.
 
 ![PLL Parameters](SDRAM/PLL_Parameters_01.png)
 
@@ -38,19 +41,17 @@ There is no need for dynamic reconfiguration.
 
 ![PLL Parameters](SDRAM/PLL_Parameters_05.png)
 
-Set the first output to 100 MHz, 0 phase.
+Set the first output to 100&nbsp;MHz, 0&nbsp;phase.
 
 ![PLL Parameters](SDRAM/PLL_Parameters_06.png)
 
-Set the second output to 100 MHz, -90&deg; phase
+Set the second output to 100&nbsp;MHz, -90&deg; phase
 
 ![PLL Parameters](SDRAM/PLL_Parameters_07.png)
 
-We'll need a 780 kHz clock later, so you might as well add it now.
+No more outputs are required.
 
 ![PLL Parameters](SDRAM/PLL_Parameters_08.png)
-
-No more outputs are required.
 
 ![PLL Parameters](SDRAM/PLL_Parameters_09.png)
 
@@ -91,7 +92,7 @@ always @(posedge Clk_100M) Reset <= ~PLL_Locked || ~ipnReset;
 
 If you feel really ambitious, you can write your own SDRAM controller.  The
 datasheet is provided in the
-[Github References](https://github.com/jpt13653903/UCT-FPGA-Course-2024/blob/master/Reference%20Material/Peripherals/IS42S16320D.pdf).
+[Github References](https://github.com/jpt13653903/UCT-FPGA-Course/blob/master/Reference%20Material/Peripherals/IS42S16320D.pdf).
 It is highly recommended, however, that you use an existing controller, such as
 [jpt13653903/IS42S16320D-SDRAM](https://github.com/jpt13653903/IS42S16320D-SDRAM) on Github.
 
@@ -251,6 +252,8 @@ set_multicycle_path -from [get_clocks opClk_SDRAM] \
 
 set_output_delay -max -clock opClk_SDRAM  1.6 [get_ports { bpSDRAM* opSDRAM* }]
 set_output_delay -min -clock opClk_SDRAM -0.9 [get_ports { bpSDRAM* opSDRAM* }]
+
+set_false_path -from * -to [get_ports opReadData*]
 #-------------------------------------------------------------------------------
 ```
 
@@ -414,7 +417,7 @@ qualifier to only store samples when the command is `REF`.
 
 Set the trigger to the `REF` command, without a storage qualifier, and log the
 behaviour after the test circuit finished.  Then measure the number of clock
-cycles between refresh cycles (752 cycles in the figure below).
+cycles between refresh cycles (752&nbsp;cycles in the figure below).
 
 ![Refresh Log Late](SDRAM/RefreshLogLate.png)
 
@@ -424,8 +427,8 @@ cycles between refresh cycles (752 cycles in the figure below).
 
 The test circuit is not very useful in verifying the memory, because it writes
 the same 16-bit sequence many times.  Change it to store 32-bit counters
-instead (i.e. odd addresses store the least significant 16 bits, and even
-addresses the most significant 16 bits) and verify that the SDRAM controller
+instead (i.e. odd addresses store the least significant 16&nbsp;bits, and even
+addresses the most significant 16&nbsp;bits) and verify that the SDRAM controller
 is functioning correctly for all addresses.
 
 You don't need to check the whole thing (obviously).  Do strategic spot-checks.

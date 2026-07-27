@@ -42,7 +42,7 @@ reg [15:0]Data; // (R/W, MB, Address, Byte) or (2 Bytes)
 //------------------------------------------------------------------------------
 
 typedef enum {
-  Setup,
+  Setup, Enable,
   ReadX, ReadY, ReadZ,
   Transaction
 } STATE;
@@ -69,6 +69,15 @@ always @(posedge ipClk) begin
       Setup: begin
         // SPI 4-wire; Full-res; Right-justify; 4g Range
         Data     <= {2'b00, 6'h31, 8'b0000_1001};
+        Count    <= 5'd16;
+        State    <= Transaction;
+        RetState <= Enable;
+      end
+      //------------------------------------------------------------------------
+
+      Enable: begin
+        // Disable auto-sleep, and set to normal measure mode
+        Data     <= {2'b00, 6'h2D, 8'b0010_1000};
         Count    <= 5'd16;
         State    <= Transaction;
         RetState <= ReadX;
@@ -439,7 +448,7 @@ altsource_probe #(
 endmodule
 ```
 
-You'll need to add one of the 50 MHz clock inputs in the process.  Remember to
+You'll need to add one of the 50&nbsp;MHz clock inputs in the process.  Remember to
 do the pin-assignments.
 
 ```tcl
@@ -459,6 +468,8 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to opADXL345_*
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ipADXL345_*
 #-------------------------------------------------------------------------------
 ```
+
+If the accelerometer is not responding, use the `nReset` button.
 
 ![Sources and Probes](Questa/SourcesAndProbes.png)
 
