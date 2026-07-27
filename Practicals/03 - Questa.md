@@ -448,7 +448,7 @@ altsource_probe #(
 endmodule
 ```
 
-You'll need to add one of the 50 MHz clock inputs in the process.  Remember to
+You'll need to add one of the 50&nbsp;MHz clock inputs in the process.  Remember to
 do the pin-assignments.
 
 ```tcl

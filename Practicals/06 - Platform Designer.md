@@ -17,7 +17,7 @@ Open Platform Designer:
 
 ![Platform Designer Start](PlatformDesigner/PlatformDesignerStart.png)
 
-Change the clock frequency to 100 MHz.
+Change the clock frequency to 100&nbsp;MHz.
 
 ### Add a JTAG to Avalon Master Bridge
 

@@ -107,7 +107,8 @@ Compile and program the FPGA, then open the "In-System Sources and Probes Editor
 
 ![Sources and Probes Menu](SourcesAndProbes/SourcesAndProbesMenu.png)
 
-It might complain about "No instances found in the current project or on the device".  You can safely ignore this.
+It might complain about "No instances found in the current project or on the device".
+You can safely ignore this.
 
 Select the instance you want to connect to ("PRB1" in this case), then click
 the "Continuously Read Probe Data" toolbar icon: ![Sample Icon](SourcesAndProbes/SampleIcon.png)

@@ -12,11 +12,20 @@ This removes the high frequency component from the mixing process.
 
 ## Filter Parameters
 
+Typical filter parameters are:
+
 - 2048-point FIR filter that decimates by 256
   (i.e. one sample output for every 256&nbsp;samples input)
+- The FIR filter should run on the 100&nbsp;MHz clock,
+  with a new sample from the ADC every 10.24 μs
 - Use a cut-off frequency of 300&nbsp;Hz and a
   [Hann window](https://en.wikipedia.org/wiki/Window\_function\#Hann\_window)<br/>
   $w(n) = \sin^2\left(\frac{\pi n}{N-1}\right)$
+
+>[!TIP]
+> You have sufficient clock cycles between input ADC samples to perform all
+> required calculations in a leisurely fashion.  Do not waste resources if
+> you don't need to.
 
 --------------------------------------------------------------------------------
 
