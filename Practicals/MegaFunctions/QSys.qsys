@@ -6,9 +6,17 @@
    version="1.0"
    description=""
    tags=""
-   categories="" />
+   categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
+   element Injection
+   {
+      datum _sortIndex
+      {
+         value = "3";
+         type = "int";
+      }
+   }
    element JTAG
    {
       datum _sortIndex
@@ -21,7 +29,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "5";
          type = "int";
       }
    }
@@ -29,7 +37,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "4";
          type = "int";
       }
    }
@@ -71,10 +79,29 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
+ <interface name="injection" internal="Injection.s0" type="avalon" dir="end" />
  <interface name="master" internal="master.s0" type="avalon" dir="end" />
  <interface name="registers" internal="Registers.m0" type="avalon" dir="start" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <interface name="sdram" internal="SDRAM.m0" type="avalon" dir="start" />
+ <module
+   name="Injection"
+   kind="altera_avalon_mm_bridge"
+   version="25.1"
+   enabled="1">
+  <parameter name="ADDRESS_UNITS" value="WORDS" />
+  <parameter name="ADDRESS_WIDTH" value="25" />
+  <parameter name="DATA_WIDTH" value="16" />
+  <parameter name="LINEWRAPBURSTS" value="0" />
+  <parameter name="MAX_BURST_SIZE" value="1" />
+  <parameter name="MAX_PENDING_RESPONSES" value="4" />
+  <parameter name="PIPELINE_COMMAND" value="1" />
+  <parameter name="PIPELINE_RESPONSE" value="1" />
+  <parameter name="SYMBOL_WIDTH" value="8" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="26" />
+  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
+  <parameter name="USE_RESPONSE" value="0" />
+ </module>
  <module
    name="JTAG"
    kind="altera_jtag_avalon_master"
@@ -159,6 +186,11 @@
   <parameter name="baseAddress" value="0x04000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection kind="avalon" version="25.1" start="Injection.m0" end="SDRAM.s0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection kind="avalon" version="25.1" start="JTAG.master" end="SDRAM.s0">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -173,6 +205,7 @@
  <connection kind="clock" version="25.1" start="clk_0.clk" end="SDRAM.clk" />
  <connection kind="clock" version="25.1" start="clk_0.clk" end="Registers.clk" />
  <connection kind="clock" version="25.1" start="clk_0.clk" end="JTAG.clk" />
+ <connection kind="clock" version="25.1" start="clk_0.clk" end="Injection.clk" />
  <connection
    kind="reset"
    version="25.1"
@@ -189,6 +222,11 @@
    version="25.1"
    start="clk_0.clk_reset"
    end="Registers.reset" />
+ <connection
+   kind="reset"
+   version="25.1"
+   start="clk_0.clk_reset"
+   end="Injection.reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />

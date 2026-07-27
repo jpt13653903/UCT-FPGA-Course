@@ -63,8 +63,8 @@ wire [29:0]Master_Address;
 wire [ 3:0]Master_ByteEnable;
 wire       Master_WaitRequest;
 wire [31:0]Master_WriteData;
-wire       Master_Write = 0;
-wire       Master_Read  = 0;
+wire       Master_Write;
+wire       Master_Read;
 wire [31:0]Master_ReadData;
 wire       Master_ReadDataValid;
 
@@ -76,6 +76,15 @@ wire       Registers_Write;
 wire       Registers_Read;
 wire [31:0]Registers_ReadData;
 wire       Registers_ReadDataValid;
+
+wire [24:0]Injection_Address;
+wire [ 1:0]Injection_ByteEnable;
+wire       Injection_WaitRequest;
+wire [15:0]Injection_WriteData;
+wire       Injection_Write;
+wire       Injection_Read;
+wire [15:0]Injection_ReadData;
+wire       Injection_ReadDataValid;
 
 wire [24:0]SDRAM_Address;
 wire [ 1:0]SDRAM_ByteEnable;
@@ -111,6 +120,17 @@ QSys QSys_Inst (
   .registers_readdata     (Registers_ReadData     ), // In
   .registers_readdatavalid(Registers_ReadDataValid), // In
   .registers_debugaccess  (                       ), // Out
+
+  .injection_address      (Injection_Address      ), // In
+  .injection_byteenable   (Injection_ByteEnable   ), // In
+  .injection_burstcount   (1                      ), // In
+  .injection_waitrequest  (Injection_WaitRequest  ), // Out
+  .injection_writedata    (Injection_WriteData    ), // In
+  .injection_write        (Injection_Write        ), // In
+  .injection_read         (Injection_Read         ), // In
+  .injection_readdata     (Injection_ReadData     ), // Out
+  .injection_readdatavalid(Injection_ReadDataValid), // Out
+  .injection_debugaccess  (0                      ), // In
 
   .sdram_address          (SDRAM_Address          ), // Out
   .sdram_byteenable       (SDRAM_ByteEnable       ), // Out
@@ -178,38 +198,66 @@ assign Registers_WaitRequest = 0;
 
 always @(posedge Clk_100M) begin
   if(Reset) begin
-    opLED <= 0;
 
   end else if(Registers_Write) begin
     case(Registers_Address)
-      8'h01: begin
-        if(Registers_ByteEnable[0]) opLED[7:0] <= Registers_WriteData[7:0];
-        if(Registers_ByteEnable[1]) opLED[9:8] <= Registers_WriteData[9:8];
-      end
+      default:;
     endcase
   end
 
   case(Registers_Address)
     8'h00: Registers_ReadData <= ipSwitch;
-    8'h01: Registers_ReadData <= opLED;
 
     8'h10: Registers_ReadData <= { {16{G_Sensor_X[15]}}, G_Sensor_X };
     8'h11: Registers_ReadData <= { {16{G_Sensor_Y[15]}}, G_Sensor_Y };
     8'h12: Registers_ReadData <= { {16{G_Sensor_Z[15]}}, G_Sensor_Z };
+
+    default:;
   endcase
   Registers_ReadDataValid <= Registers_Read;
 end
 //------------------------------------------------------------------------------
 
-wire [15:0]InjectionData;
-wire       InjectionValid;
+wire JTAG_Busy;
+
+VirtualJTAG_MM VirtualJTAG_MM_Inst(
+  .ipClk                 (Clk_100M),
+  .ipReset               (Reset),
+
+  .opBusy                (JTAG_Busy),
+
+  .opAvalon_Address      (Master_Address      ),
+  .opAvalon_ByteEnable   (Master_ByteEnable   ),
+  .ipAvalon_WaitRequest  (Master_WaitRequest  ),
+
+  .opAvalon_WriteData    (Master_WriteData    ),
+  .opAvalon_Write        (Master_Write        ),
+
+  .opAvalon_Read         (Master_Read         ),
+  .ipAvalon_ReadData     (Master_ReadData     ),
+  .ipAvalon_ReadDataValid(Master_ReadDataValid)
+);
+assign opLED = JTAG_Busy ? Master_Address[23:14] : Injection_Address[24:15];
+//------------------------------------------------------------------------------
+
+wire [15:0]Injection_Data;
+wire       Injection_Valid;
 
 Injection Injection_Inst(
   .ipClk  (Clk_100M),
-  .ipReset(Reset),
+  .ipReset(Reset | JTAG_Busy),
 
-  .opData (InjectionData),
-  .opValid(InjectionValid)
+  .opSDRAM_Address      (Injection_Address      ),
+  .opSDRAM_ByteEnable   (Injection_ByteEnable   ),
+  .ipSDRAM_WaitRequest  (Injection_WaitRequest  ),
+  .opSDRAM_WriteData    (Injection_WriteData    ),
+  .opSDRAM_Write        (Injection_Write        ),
+  .opSDRAM_Read         (Injection_Read         ),
+  .ipSDRAM_ReadData     (Injection_ReadData     ),
+  .ipSDRAM_ReadDataValid(Injection_ReadDataValid),
+
+  .opData (Injection_Data),
+  .opValid(Injection_Valid)
 );
 //------------------------------------------------------------------------------
 
@@ -230,8 +278,8 @@ NoiseShaper #(
   .ipClk  (Clk_100M),
   .ipReset(Reset),
 
-  .ipData ({ ~InjectionData[15], InjectionData[14:0] }), // Signed to offset-binary
-  .ipValid(InjectionValid),
+  .ipData ({ ~Injection_Data[15], Injection_Data[14:0] }), // Signed to offset-binary
+  .ipValid(Injection_Valid),
 
   .opData (DutyCycle),
   .opValid(DutyCycleValid)

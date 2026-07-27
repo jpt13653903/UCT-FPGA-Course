@@ -271,6 +271,7 @@ set_global_assignment -name VERILOG_FILE Modules/Injection.v
 set_global_assignment -name VERILOG_FILE Modules/IS42S16320D.v
 set_global_assignment -name VERILOG_FILE Modules/NoiseShaper.v
 set_global_assignment -name VERILOG_FILE Modules/PWM.v
+set_global_assignment -name VERILOG_FILE Modules/VirtualJTAG_MM.v
 set_global_assignment -name VERILOG_FILE MyFirstProject.v
 set_global_assignment -name SDC_FILE MyFirstProject.sdc
 # -------------------------------------------------------------------------- #
