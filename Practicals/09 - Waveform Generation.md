@@ -40,6 +40,8 @@ You should not log the invalid samples.  In other words, don't log while the
 transient is still travelling to the target and back.  Only log the last
 32&nbsp;samples (about 84&nbsp;ms) of each sweep.
 
+![FMCW Time](WaveformGeneration/FMCW_Time.svg)
+
 --------------------------------------------------------------------------------
 
 ## Control
