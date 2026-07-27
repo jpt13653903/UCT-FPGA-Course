@@ -18,7 +18,8 @@ as a collaborator on your repository.
 
 ## Online Resources
 
-- [DE10-Lite](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=234&No=1021)
-- [MAX-10 FPGA](https://www.intel.com/programmable/technical-pdfs/max10-handbook.pdf)
-- [Quartus Prime](https://www.intel.com/programmable/technical-pdfs/qps-ugs.pdf)
+- [DE10-Lite](https://de10-lite.terasic.com)
+- [MAX-10 FPGA](https://www.altera.com/products/fpga/max/10)
+- [Quartus Prime](https://www.altera.com/products/development-tools/quartus)
+- [Sonar PCB](https://github.com/jpt13653903/Sonar)
 
