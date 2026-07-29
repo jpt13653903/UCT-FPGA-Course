@@ -91,7 +91,7 @@ Microphone Amplifier Frequency Response
 > You might need to install `ffmpeg` for `convert.py` to work.
 > You can do this in Windows with `winget install ffmpeg`.
 
-> [!TIP]
+> [!NOTE]
 > You need to add `quartus_stp` to your system path.
 > The typical path is `C:\altera_lite\25.1std\quartus\bin64`.
 

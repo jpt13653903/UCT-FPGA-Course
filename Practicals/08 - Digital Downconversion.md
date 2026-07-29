@@ -50,6 +50,11 @@ external memory instead, so that you can sample for longer at a time.
 Trigger a set sample size, after which the PC can download the resulting log.
 A second or two worth of data is plenty.  Plot the result in Python.
 
+>[!TIP]
+> The `device_virtual_dr_shift` function in `WriteData.tcl` returns the result
+> shifted from the device if you ask for it.  Ask your local friendly LLM for
+> assistance.
+
 There is no filter before sub-sampling, so the result will be a bit of a mess.
 This will be fixed with a FIR filter in practical 10.
 
