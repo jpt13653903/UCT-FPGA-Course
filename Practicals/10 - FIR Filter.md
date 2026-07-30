@@ -47,7 +47,7 @@ Typical filter parameters are:
 Once the FIR filter is working, you should have a working sonar.
 The intended sequence of events are:
 
-1. The PC triggers a burst (you can trigger a burst be reading the previous)
+1. The PC triggers a burst (you can trigger a burst by reading the previous)
 2. The FPGA performs a log of $N$ sweeps (you can let the PC wait a fixed time,
    or get the FPGA to tell you when it's done)
 3. The PC downloads the log

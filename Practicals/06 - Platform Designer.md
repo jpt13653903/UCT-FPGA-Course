@@ -30,7 +30,7 @@ microcontroller.  This will allow us to control the device from the PC.
 
 ### Add more Avalon bridges
 
-We want two peripheral: control registers and the SDRAM.
+We want two peripherals: control registers and the SDRAM.
 Add two pipeline bridges.  You can use `F2` to rename them.
 
 Also connect them together and export the `Master` side of the bridges:

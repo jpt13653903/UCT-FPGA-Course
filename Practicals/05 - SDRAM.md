@@ -69,14 +69,12 @@ You only need the `Variation file`, so feel free to deselect the others.
 
 ```systemverilog
 wire Clk_100M;
-wire Clk_780k;
 wire PLL_Locked;
 
 SDRAM_PLL SDRAM_PLL_Inst(
   .inclk0(ipClk_50M),
   .c0    (Clk_100M),
   .c1    (opClk_SDRAM),
-  .c2    (Clk_780k),
   .locked(PLL_Locked)
 );
 //------------------------------------------------------------------------------
