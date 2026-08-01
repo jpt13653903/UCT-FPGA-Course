@@ -5,9 +5,7 @@ module ADXL345 #(
   input ipClk, ipReset,
 
   // 2's Compliment Output
-  output reg [15:0]opX,
-  output reg [15:0]opY,
-  output reg [15:0]opZ,
+  output G_Sensor_RdStruct opValue,
 
   // Physical device interface
   output reg opnCS, opSClk, opSDI,
@@ -71,29 +69,29 @@ always @(posedge ipClk) begin
       //------------------------------------------------------------------------
 
       ReadX: begin
-        opZ      <= {Data[7:0], Data[15:8]};
-        Data     <= {2'b11, 6'h32, 8'd0};
-        Count    <= 5'd24;
-        State    <= Transaction;
-        RetState <= ReadY;
+        opValue.Z <= {Data[7:0], Data[15:8]};
+        Data      <= {2'b11, 6'h32, 8'd0};
+        Count     <= 5'd24;
+        State     <= Transaction;
+        RetState  <= ReadY;
       end
       //------------------------------------------------------------------------
 
       ReadY: begin
-        opX      <= {Data[7:0], Data[15:8]};
-        Data     <= {2'b11, 6'h34, 8'd0};
-        Count    <= 5'd24;
-        State    <= Transaction;
-        RetState <= ReadZ;
+        opValue.X <= {Data[7:0], Data[15:8]};
+        Data      <= {2'b11, 6'h34, 8'd0};
+        Count     <= 5'd24;
+        State     <= Transaction;
+        RetState  <= ReadZ;
       end
       //------------------------------------------------------------------------
 
       ReadZ: begin
-        opY      <= {Data[7:0], Data[15:8]};
-        Data     <= {2'b11, 6'h36, 8'd0};
-        Count    <= 5'd24;
-        State    <= Transaction;
-        RetState <= ReadX;
+        opValue.Y <= {Data[7:0], Data[15:8]};
+        Data      <= {2'b11, 6'h36, 8'd0};
+        Count     <= 5'd24;
+        State     <= Transaction;
+        RetState  <= ReadX;
       end
       //------------------------------------------------------------------------
 

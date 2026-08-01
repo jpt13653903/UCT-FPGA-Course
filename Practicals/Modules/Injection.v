@@ -12,119 +12,38 @@ module Injection(
   input            ipSDRAM_ReadDataValid,
 
   output reg [15:0]opData,
-  output           opValid
+  output reg       opValid
 );
 //------------------------------------------------------------------------------
 
-reg  [ 9:0]WrAddress;
 reg  [ 9:0]RdAddress;
+wire       RdReady;
 wire [15:0]RdData;
 
-altsyncram #(
-  .address_aclr_b                    ("NONE"),
-  .address_reg_b                     ("CLOCK0"),
-  .clock_enable_input_a              ("BYPASS"),
-  .clock_enable_input_b              ("BYPASS"),
-  .clock_enable_output_b             ("BYPASS"),
-  .intended_device_family            ("MAX 10"),
-  .lpm_type                          ("altsyncram"),
-  .numwords_a                        (1024),
-  .numwords_b                        (1024),
-  .operation_mode                    ("DUAL_PORT"),
-  .outdata_aclr_b                    ("NONE"),
-  .outdata_reg_b                     ("UNREGISTERED"),
-  .power_up_uninitialized            ("FALSE"),
-  .ram_block_type                    ("M9K"),
-  .read_during_write_mode_mixed_ports("DONT_CARE"),
-  .widthad_a                         (10),
-  .widthad_b                         (10),
-  .width_a                           (16),
-  .width_b                           (16),
-  .width_byteena_a                   (1)
-)InjectionBuffer(
-  .clock0   (ipClk),
+ReadCache #(16) InjectionBuffer(
+  .ipClk                 (ipClk  ),
+  .ipReset               (ipReset),
 
-  .address_a(WrAddress),
-  .data_a   (ipSDRAM_ReadData),
-  .wren_a   (ipSDRAM_ReadDataValid),
+  .opMemory_Address      (opSDRAM_Address      ),
+  .opMemory_ByteEnable   (opSDRAM_ByteEnable   ),
+  .ipMemory_WaitRequest  (ipSDRAM_WaitRequest  ),
+  .opMemory_WriteData    (opSDRAM_WriteData    ),
+  .opMemory_Write        (opSDRAM_Write        ),
+  .opMemory_Read         (opSDRAM_Read         ),
+  .ipMemory_ReadData     (ipSDRAM_ReadData     ),
+  .ipMemory_ReadDataValid(ipSDRAM_ReadDataValid),
 
-  .address_b(RdAddress),
-  .q_b      (RdData),
-
-  .aclr0         (1'b0),
-  .aclr1         (1'b0),
-  .addressstall_a(1'b0),
-  .addressstall_b(1'b0),
-  .byteena_a     (1'b1),
-  .byteena_b     (1'b1),
-  .clock1        (1'b1),
-  .clocken0      (1'b1),
-  .clocken1      (1'b1),
-  .clocken2      (1'b1),
-  .clocken3      (1'b1),
-  .data_b        ({16{1'b1}}),
-  .eccstatus     (),
-  .q_a           (),
-  .rden_a        (1'b1),
-  .rden_b        (1'b1),
-  .wren_b        (1'b0)
+  .ipRdAddress           (RdAddress),
+  .opRdReady             (RdReady  ),
+  .opRdData              (RdData   )
 );
-
-wire [9:0]FIFO_Length = WrAddress - RdAddress;
 //------------------------------------------------------------------------------
 
-reg Reset;
-assign opSDRAM_ByteEnable = 2'b11;
-assign opSDRAM_WriteData  = 0;
-assign opSDRAM_Write      = 0;
-
-enum {
-  Idle,
-  Reading
-} State;
-
-always @(posedge ipClk) begin: Input
-  Reset <= ipReset;
-
-  if(Reset) begin
-    opSDRAM_Address <= 0;
-    opSDRAM_Read    <= 0;
-    WrAddress       <= 0;
-
-    State <= Idle;
-
-  end else begin
-    if(~ipSDRAM_WaitRequest) begin
-      case(State)
-        Idle: begin
-          if(FIFO_Length < 512) begin
-            opSDRAM_Read <= 1'b1;
-            State <= Reading;
-          end
-        end
-
-        Reading: begin
-          if(&opSDRAM_Address[8:0]) begin
-            opSDRAM_Read <= 1'b0;
-            State <= Idle;
-          end
-          opSDRAM_Address <= opSDRAM_Address + 1'b1;
-        end
-
-        default:;
-      endcase
-    end
-
-    if(ipSDRAM_ReadDataValid) begin
-      WrAddress <= WrAddress + 1'b1;
-    end
-  end
-end
-//------------------------------------------------------------------------------
-
+reg       Reset;
 reg [10:0]Count = 0;
 
 always @(posedge ipClk) begin: Output
+  Reset <= ipReset;
   Count <= Count + 1'b1;
 
   if(Reset) begin
@@ -133,7 +52,7 @@ always @(posedge ipClk) begin: Output
 
     RdAddress <= 16'h0;
 
-  end else if(|FIFO_Length && ~|Count) begin
+  end else if(RdReady && ~|Count) begin
     opData    <= RdData;
     opValid   <= 1'b1;
     RdAddress <= RdAddress + 1'b1;
