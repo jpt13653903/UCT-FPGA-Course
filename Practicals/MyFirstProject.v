@@ -347,6 +347,23 @@ MAX11059 #(
 );
 //------------------------------------------------------------------------------
 
+wire [23:0]NCO_Frequency;
+wire       RampStart;
+
+RampGenerator RampGenerator_Inst(
+  .ipClk        (Clk_100M ),
+  .ipClkEnable  (ADC_Valid),
+  .ipReset      (Reset    ),
+
+  .ipStart      (WrRegisters.DSP.RampStart),
+  .ipStop       (WrRegisters.DSP.RampStop ),
+  .ipStep       (WrRegisters.DSP.RampStep ),
+
+  .opFrequency  (NCO_Frequency),
+  .opStartStrobe(RampStart)
+);
+//------------------------------------------------------------------------------
+
 wire [8:0]NCO_Sin;
 wire [8:0]NCO_Cos;
 
@@ -355,7 +372,7 @@ NCO NCO_Inst(
   .ipClkEnable(ADC_Valid),
   .ipReset    (Reset),
 
-  .ipFrequency(WrRegisters.DSP.NCO_Frequency),
+  .ipFrequency(NCO_Frequency),
 
   .opSin      (NCO_Sin),
   .opCos      (NCO_Cos)
@@ -387,6 +404,7 @@ wire       Filter_Valid;
 
 Filter Filter_Inst(
   .ipClk  (Clk_100M),
+  .ipReset(Reset   ),
 
   .ipI    (Mixer_I    ),
   .ipQ    (Mixer_Q    ),
@@ -452,8 +470,9 @@ ADC_Logger ADC_Logger_Inst(
 //------------------------------------------------------------------------------
 
 LPF_Logger LPF_Logger_Inst(
-  .ipClk  (Clk_100M),
-  .ipReset(Reset),
+  .ipClk      (Clk_100M),
+  .ipReset    (Reset),
+  .ipRampStart(RampStart),
 
   .ipGo                  (WrRegisters.Logger.LPF_Go  ),
   .opBusy                (RdRegisters.Logger.LPF_Busy),
@@ -461,10 +480,6 @@ LPF_Logger LPF_Logger_Inst(
   .ipI                   (Filter_I    ),
   .ipQ                   (Filter_Q    ),
   .ipValid               (Filter_Valid),
-
-  // .ipI                   ( { {2{ADC_Samples[7][13]}}, ADC_Samples[7] } ),
-  // .ipQ                   (0),
-  // .ipValid               (ADC_Valid),
 
   .ipAvalon_Address      (LPF_Logger_Address      ),
   .ipAvalon_ByteEnable   (LPF_Logger_ByteEnable   ),

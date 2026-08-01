@@ -1,6 +1,7 @@
 module LPF_Logger(
   input  ipClk,
   input  ipReset,
+  input  ipRampStart,
 
   input      ipGo,
   output reg opBusy,
@@ -75,9 +76,12 @@ altsyncram #(
 );
 
 assign opAvalon_WaitRequest = 0;
+//------------------------------------------------------------------------------
 
-reg Reset;
-enum { Idle, Logging } State;
+reg      Reset;
+reg [5:0]Count;
+
+enum { Idle, WaitForRamp, DiscardSamples, Logging } State;
 
 always @(posedge ipClk) begin
   Reset <= ipReset;
@@ -99,9 +103,26 @@ always @(posedge ipClk) begin
       WrData    <= 'hX;
       WrEnable  <= 0;
 
-      if(~opBusy && ipGo) State <= Logging;
+      if(~opBusy && ipGo) State <= WaitForRamp;
 
       opBusy <= ipGo;
+    end
+    //--------------------------------------------------------------------------
+
+    WaitForRamp: begin
+      Count    <= 0;
+      WrEnable <= 0;
+
+      if(ipRampStart)
+        State <= DiscardSamples;
+    end
+    //--------------------------------------------------------------------------
+
+    DiscardSamples: begin
+      if(ipValid) begin
+        if(Count == 4) State <= Logging;
+        Count <= Count + 1;
+      end
     end
     //--------------------------------------------------------------------------
 
@@ -111,7 +132,12 @@ always @(posedge ipClk) begin
         WrData    <= { ipQ, ipI };
         WrEnable  <= 1'b1;
 
-        if(WrAddress == 10'h3FE) State <= Idle;
+        if(WrAddress == 10'h3FE)
+          State <= Idle;
+        else if(Count == 36)
+          State <= WaitForRamp;
+
+        Count <= Count + 1;
 
       end else begin
         WrEnable <= 1'b0;

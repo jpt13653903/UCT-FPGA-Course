@@ -12,6 +12,8 @@ reg ipReset = 1;
 initial #50 ipReset <= 0;
 //------------------------------------------------------------------------------
 
+reg  ipRampStart;
+
 reg  ipGo;
 wire opBusy;
 
@@ -29,8 +31,9 @@ wire [31:0]opAvalon_ReadData;
 wire       opAvalon_ReadDataValid;
 
 LPF_Logger DUT(
-  .ipClk                 (ipClk  ),
-  .ipReset               (ipReset),
+  .ipClk                 (ipClk      ),
+  .ipReset               (ipReset    ),
+  .ipRampStart           (ipRampStart),
 
   .ipGo                  (ipGo  ),
   .opBusy                (opBusy),
@@ -81,6 +84,17 @@ always begin
 
     #980; // about 1 MSps, so that the simulation runs faster
   end
+end
+//------------------------------------------------------------------------------
+
+always begin
+  repeat(38) @(posedge ipValid);
+
+  @(posedge ipClk);
+  ipRampStart <= 1'b1;
+
+  @(posedge ipClk);
+  ipRampStart <= 1'b0;
 end
 //------------------------------------------------------------------------------
 

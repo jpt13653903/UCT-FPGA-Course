@@ -39,7 +39,9 @@ class Regs:
         Z = 0x12
 
     class DSP:
-        NCO_Frequency = 0x20
+        RampStart = 0x20
+        RampStop  = 0x21
+        RampStep  = 0x22
 
     class Logger:
         ADC_Go   = 0x30

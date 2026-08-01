@@ -16,7 +16,9 @@ typedef struct packed {
 //------------------------------------------------------------------------------
 
 typedef struct packed {
-  logic [23:0]NCO_Frequency;
+  logic [23:0]RampStart;
+  logic [23:0]RampStop;
+  logic [23:0]RampStep;
 } DSP_WrStruct;
 //------------------------------------------------------------------------------
 
@@ -75,7 +77,9 @@ always_comb begin
     8'h11:   ReadData = { {16{ipRdRegisters.G_Sensor.Y[15]}}, ipRdRegisters.G_Sensor.Y };
     8'h12:   ReadData = { {16{ipRdRegisters.G_Sensor.Z[15]}}, ipRdRegisters.G_Sensor.Z };
 
-    8'h20:   ReadData = { {8{opWrRegisters.DSP.NCO_Frequency[23]}}, opWrRegisters.DSP.NCO_Frequency};
+    8'h20:   ReadData = { {8{opWrRegisters.DSP.RampStart[23]}}, opWrRegisters.DSP.RampStart };
+    8'h21:   ReadData = { {8{opWrRegisters.DSP.RampStop [23]}}, opWrRegisters.DSP.RampStop  };
+    8'h22:   ReadData = { {8{opWrRegisters.DSP.RampStep [23]}}, opWrRegisters.DSP.RampStep  };
 
     8'h30:   ReadData = opWrRegisters.Logger.ADC_Go;
     8'h31:   ReadData = ipRdRegisters.Logger.ADC_Busy;
@@ -105,7 +109,9 @@ always @(posedge ipClk) begin
     opWrRegisters.DE10.RegistersToLEDs <= 0;
     opWrRegisters.DE10.LEDs            <= 0;
 
-    opWrRegisters.DSP.NCO_Frequency    <= 24'h1A36E3; // 10 kHz
+    opWrRegisters.DSP.RampStart        <= 24'h1A36E3; // 10 kHz
+    opWrRegisters.DSP.RampStop         <= 24'h23A6CE; // 13.6 kHz
+    opWrRegisters.DSP.RampStep         <= 24'h40    ;
 
     opWrRegisters.Logger.ADC_Go        <= 0;
     opWrRegisters.Logger.LPF_Go        <= 0;
@@ -115,7 +121,9 @@ always @(posedge ipClk) begin
       8'h01: opWrRegisters.DE10.RegistersToLEDs <= WriteData;
       8'h02: opWrRegisters.DE10.LEDs            <= WriteData;
 
-      8'h20: opWrRegisters.DSP.NCO_Frequency    <= WriteData;
+      8'h20: opWrRegisters.DSP.RampStart        <= WriteData;
+      8'h21: opWrRegisters.DSP.RampStop         <= WriteData;
+      8'h22: opWrRegisters.DSP.RampStep         <= WriteData;
 
       8'h30: opWrRegisters.Logger.ADC_Go        <= WriteData;
       8'h32: opWrRegisters.Logger.LPF_Go        <= WriteData;

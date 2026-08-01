@@ -277,6 +277,7 @@ set_global_assignment -name VERILOG_FILE Modules/Mixer.v
 set_global_assignment -name VERILOG_FILE Modules/NCO.v
 set_global_assignment -name VERILOG_FILE Modules/NoiseShaper.v
 set_global_assignment -name VERILOG_FILE Modules/PWM.v
+set_global_assignment -name VERILOG_FILE Modules/RampGenerator.v
 set_global_assignment -name VERILOG_FILE Modules/ReadCache.v
 set_global_assignment -name VERILOG_FILE Modules/Registers.v
 set_global_assignment -name VERILOG_FILE Modules/VirtualJTAG_MM.v

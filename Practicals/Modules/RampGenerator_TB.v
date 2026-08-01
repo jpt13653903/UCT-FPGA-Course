@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-module Filter_TB;
+module RampGenerator_TB;
 //------------------------------------------------------------------------------
 
 // Clock
@@ -12,37 +12,37 @@ reg ipReset = 1;
 initial #50 ipReset <= 0;
 //------------------------------------------------------------------------------
 
-reg  [15:0]ipI     = 0;
-reg  [15:0]ipQ     = 0;
-reg        ipValid = 0;
+reg ipClkEnable;
 
-wire [15:0]opI;
-wire [15:0]opQ;
-wire       opValid;
+reg  [23:0]ipStart = 24'h1A36E3;
+reg  [23:0]ipStop  = 24'h23A6CE;
+reg  [23:0]ipStep  = 24'h40;
 
-Filter DUT(
-  .ipClk,
+wire [23:0]opFrequency;
+wire       opStartStrobe;
 
-  .ipI,
-  .ipQ,
-  .ipValid,
+RampGenerator DUT(
+  .ipClk        (ipClk      ),
+  .ipClkEnable  (ipClkEnable),
+  .ipReset      (ipReset    ),
 
-  .opI,
-  .opQ,
-  .opValid
+  .ipStart      (ipStart),
+  .ipStop       (ipStop ),
+  .ipStep       (ipStep ),
+
+  .opFrequency  (opFrequency),
+  .opStartStrobe(opStartStrobe)
 );
 //------------------------------------------------------------------------------
 
 always begin
   @(posedge ipClk);
-  ipI     <= ipI + 1'b1;
-  ipQ     <= ipQ + 1'b1;
-  ipValid <= 1'b1;
+  ipClkEnable <= 1'b1;
 
   @(posedge ipClk);
-  ipValid <= 1'b0;
+  ipClkEnable <= 1'b0;
 
-  #980;
+  repeat(1022) @(posedge ipClk);
 end
 //------------------------------------------------------------------------------
 
