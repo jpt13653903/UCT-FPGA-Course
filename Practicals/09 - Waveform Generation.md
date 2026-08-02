@@ -51,11 +51,8 @@ default.  The log should be software triggered so that the PC can ask for a
 burst (of sweeps), and then download the result afterwards.
 
 >[!TIP]
-> If you use the JTAG Master Bridge for registers and the Virtual JTAG for
-> data, then you will need to continuously switch between running the two
-> scripts (because you can only open one JTAG connection at a time).  Instead,
-> you can use the Virtual JTAG `Instruction` register to switch between
-> shifting registers and shifting data.
+> You can connect to the JTAG Master Bridge and Virtual JTAG at the same time,
+> as long as you do not try to lock the device at the same time.
 
 --------------------------------------------------------------------------------
 

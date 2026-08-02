@@ -30,8 +30,9 @@ module MAX11059 #(
 );
 //------------------------------------------------------------------------------
 
-localparam SampleRate = Clock_kHz / SamplingRate_kHz;
-localparam Quiet      = Clock_kHz / 2000;
+// Note that integer type-cast rounds to the nearest integer
+localparam SampleRate = int'(Clock_kHz / SamplingRate_kHz);
+localparam Quiet      = int'(Clock_kHz / 2000.0);
 //------------------------------------------------------------------------------
 
 reg      Reset;
@@ -118,7 +119,13 @@ always @(posedge ipClk) begin
 
       StartConversion: begin
         if(~|SampleRateCount) begin
-          opCONVST <= 1'b1;
+          if(opCONVST) begin // Receiver in deadlock, so reset
+            opValid  <= 0;
+            opCONVST <= 1'b0;
+            State    <= Setup;
+          end else begin
+            opCONVST <= 1'b1;
+          end
         end
         if(|ipnEOC) begin
           State <= WaitForConversion;

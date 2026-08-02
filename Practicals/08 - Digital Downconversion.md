@@ -45,7 +45,8 @@ Sub-sample the result by a factor of 256.
 
 The sampling rate at this point is very low, so transfer to the PC can happen
 by means of internal memory.  This said, it would be advantageous to use the
-external memory instead, so that you can sample for longer at a time.
+external memory instead, so that you can sample for longer at a time
+and / or log the raw ADC data.
 
 Trigger a set sample size, after which the PC can download the resulting log.
 A second or two worth of data is plenty.  Plot the result in Python.
