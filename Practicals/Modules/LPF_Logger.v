@@ -6,8 +6,8 @@ module LPF_Logger(
   input      ipGo,
   output reg opBusy,
 
-  input      [15:0]ipI,
-  input      [15:0]ipQ,
+  input      [23:0]ipI,
+  input      [23:0]ipQ,
   input            ipValid,
 
   input      [ 9:0]ipAvalon_Address,
@@ -21,8 +21,8 @@ module LPF_Logger(
 );
 //------------------------------------------------------------------------------
 
-reg [ 9:0]WrAddress;
-reg [31:0]WrData;
+reg [ 6:0]WrAddress;
+reg [64:0]WrData;
 reg       WrEnable;
 
 altsyncram #(
@@ -33,17 +33,17 @@ altsyncram #(
   .clock_enable_output_b             ("BYPASS"),
   .intended_device_family            ("MAX 10"),
   .lpm_type                          ("altsyncram"),
-  .numwords_a                        (1024),
-  .numwords_b                        (1024),
+  .numwords_a                        (128),
+  .numwords_b                        (256),
   .operation_mode                    ("DUAL_PORT"),
   .outdata_aclr_b                    ("NONE"),
   .outdata_reg_b                     ("UNREGISTERED"),
   .power_up_uninitialized            ("FALSE"),
   .ram_block_type                    ("M9K"),
   .read_during_write_mode_mixed_ports("DONT_CARE"),
-  .widthad_a                         (10),
-  .widthad_b                         (10),
-  .width_a                           (32),
+  .widthad_a                         (7),
+  .widthad_b                         (8),
+  .width_a                           (64),
   .width_b                           (32),
   .width_byteena_a                   (1)
 )InjectionBuffer(
@@ -129,10 +129,10 @@ always @(posedge ipClk) begin
     Logging: begin
       if(ipValid) begin
         WrAddress <= WrAddress + 1;
-        WrData    <= { ipQ, ipI };
+        WrData    <= { {8{ipQ[23]}}, ipQ, {8{ipI[23]}}, ipI };
         WrEnable  <= 1'b1;
 
-        if(WrAddress == 10'h3FE)
+        if(WrAddress == 7'h7E)
           State <= Idle;
         else if(Count == 36)
           State <= WaitForRamp;

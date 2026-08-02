@@ -343,7 +343,7 @@ MAX11059 #(
   .opnRD    (opADC_nRD   ),
   .opCONVST (opADC_CONVST),
   .ipnEOC   (ipADC_nEOC  ),
-  .ipDB     (ipADC_DB    )
+  .ipDB     ({ ipADC_DB, bpADC_CR_DB[3:2] })
 );
 //------------------------------------------------------------------------------
 
@@ -398,21 +398,30 @@ Mixer Mixer_Inst(
 );
 //------------------------------------------------------------------------------
 
-wire [15:0]Filter_I;
-wire [15:0]Filter_Q;
+wire [23:0]Filter_I;
+wire [23:0]Filter_Q;
 wire       Filter_Valid;
 
-Filter Filter_Inst(
+Filter Filter_I_Inst(
   .ipClk  (Clk_100M),
   .ipReset(Reset   ),
 
-  .ipI    (Mixer_I    ),
-  .ipQ    (Mixer_Q    ),
+  .ipData (Mixer_I    ),
   .ipValid(Mixer_Valid),
 
-  .opI    (Filter_I    ),
-  .opQ    (Filter_Q    ),
+  .opData (Filter_I    ),
   .opValid(Filter_Valid)
+);
+
+Filter Filter_Q_Inst(
+  .ipClk  (Clk_100M),
+  .ipReset(Reset   ),
+
+  .ipData (Mixer_Q    ),
+  .ipValid(Mixer_Valid),
+
+  .opData (Filter_Q),
+  .opValid()
 );
 //------------------------------------------------------------------------------
 

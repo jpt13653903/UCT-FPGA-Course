@@ -12,31 +12,45 @@ reg ipReset = 1;
 initial #50 ipReset <= 0;
 //------------------------------------------------------------------------------
 
-reg  [15:0]ipI     = 0;
-reg  [15:0]ipQ     = 0;
-reg        ipValid = 0;
+reg  [15:0]ipData;
+reg        ipValid;
 
-wire [15:0]opI;
-wire [15:0]opQ;
+wire [23:0]opData;
 wire       opValid;
 
 Filter DUT(
-  .ipClk,
+  .ipClk  (ipClk  ),
+  .ipReset(ipReset),
 
-  .ipI,
-  .ipQ,
-  .ipValid,
+  .ipData (ipData ),
+  .ipValid(ipValid),
 
-  .opI,
-  .opQ,
-  .opValid
+  .opData (opData ),
+  .opValid(opValid)
 );
 //------------------------------------------------------------------------------
 
 always begin
   @(posedge ipClk);
-  ipI     <= ipI + 1'b1;
-  ipQ     <= ipQ + 1'b1;
+  if($time < 10_000_000) begin
+    ipData <= 0;
+
+  end else if($time < 20_000_000) begin
+    ipData <= 16'h4000;
+
+  end else if($time < 30_000_000) begin
+    ipData <= 16'hC000;
+
+  end else if($time < 40_000_000) begin
+    ipData <= 16'h7FFF;
+
+  end else if($time < 50_000_000) begin
+    ipData <= 16'h8000;
+
+  end else begin
+    ipData <= 0;
+  end
+
   ipValid <= 1'b1;
 
   @(posedge ipClk);
