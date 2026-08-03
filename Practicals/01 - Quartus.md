@@ -174,8 +174,8 @@ set_location_assignment PIN_A8 -to LED[0]
 set_location_assignment PIN_A9 -to LED[1]
 ...
 
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to Switch
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to Switch*
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED*
 ```
 
 ### Other Pin Properties
