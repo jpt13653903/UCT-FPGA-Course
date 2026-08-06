@@ -52,12 +52,15 @@ with open(output_file+'.mif', 'w', newline='\n', encoding='utf-8') as file:
     file.write(f'DEPTH = {2**16};\n')
     file.write(f'WIDTH = 16;\n')
     file.write(f'ADDRESS_RADIX = HEX;\n')
-    file.write(f'DATA_RADIX = DEC;\n')
+    file.write(f'DATA_RADIX = HEX;\n')
     file.write(f'\n')
     file.write(f'CONTENT\n')
     file.write(f'BEGIN\n')
     for n, sample in enumerate(samples[0:2**16]):
-        file.write(f'    {n:04X} : {sample};\n')
+        if sample < 0:
+            file.write(f'    {n:04X} : {sample+2**16:04X};\n')
+        else:
+            file.write(f'    {n:04X} : {sample:04X};\n')
     file.write(f'END;\n')
 #-------------------------------------------------------------------------------
 
